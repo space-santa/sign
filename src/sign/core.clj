@@ -28,6 +28,6 @@
     (print-top-bottom length)))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Print the first arg as a string with a border/frame."
   [& args]
   (print-sign (first args)))
