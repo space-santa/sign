@@ -28,6 +28,6 @@
     (print-top-bottom length)))
 
 (defn -main
-  "Print the first arg as a string with a border/frame."
+  "Print the list of args as a string with a border/frame."
   [& args]
-  (print-sign (first args)))
+  (print-sign (clojure.string/join " " args)))
