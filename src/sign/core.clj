@@ -11,6 +11,17 @@
         new-b (clojure.string/join " " rest)]
     [new-a new-b]))
 
+(defn longest-string
+  "Returns the length of the longest string in the given vector of strings."
+  [words]
+  (loop [s words, l 0]
+    (if (> (count s) 0)
+      (let [newlength (count (first s))]
+        (if (> newlength l)
+          (recur (rest s) newlength)
+          (recur (rest s) l)))
+      l)))
+
 (defn tokenize-string
   [text]
   (clojure.string/split text #"\s"))
