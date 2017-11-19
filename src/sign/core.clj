@@ -23,6 +23,7 @@
       l)))
 
 (defn tokenize-string
+  "Splits a string at whitespace and returns a vector of the tokens."
   [text]
   (clojure.string/split text #"\s"))
 
