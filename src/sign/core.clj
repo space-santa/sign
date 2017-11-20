@@ -3,13 +3,23 @@
 
 (def max-chars 40)
 
-(defn move-token
-  [a b]
-  (let [tokens (clojure.string/split b #"\s")
-        [first & rest] tokens
-        new-a (clojure.string/join " " [a first])
-        new-b (clojure.string/join " " rest)]
-    [new-a new-b]))
+(defn conj-trimmed-string
+  [v s]
+  (conj v (clojure.string/trim s)))
+
+(defn make-lines
+  "Takes a vector of strings and concatenates them to lines no longer than limit."
+  [words limit]
+  (loop [retval [] tmpstring "" tmpwords words]
+    (if (> (count tmpwords) 0)
+      (let [oldstring tmpstring
+            tmpstring (apply str tmpstring " " (first tmpwords))]
+        (if (> (count tmpstring) limit)
+          (recur (conj-trimmed-string retval oldstring)
+                 (first tmpwords)
+                 (rest tmpwords))
+          (recur retval tmpstring (rest tmpwords))))
+      (conj-trimmed-string retval tmpstring))))
 
 (defn longest-string
   "Returns the length of the longest string in the given vector of strings."
@@ -40,21 +50,21 @@
   [l]
   (print-border "|" " " l))
 
-(defn print-text
-  [text]
-  (println (apply str "|  " text "  |")))
-
-(defn longest-line
-  [lines])
+(defn print-text-in-border
+  [text l]
+  (println (apply str "|  " text (apply str (repeat (- l (count text)) " ")) "  |")))
 
 (defn print-sign
   [text]
-  (let [length (longest-line text)]
-    (print-top-bottom length)
-    (print-side-border length)
-    (print-text text)
-    (print-side-border length)
-    (print-top-bottom length)))
+  (let [words (tokenize-string text)
+        lines (make-lines words 40)
+        length (longest-string lines)
+        full-length (+ 4 length)]
+    (print-top-bottom full-length)
+    (print-side-border full-length)
+    (dorun (map #(print-text-in-border % length) lines))
+    (print-side-border full-length)
+    (print-top-bottom full-length)))
 
 (defn -main
   "Print the list of args as a string with a border/frame."
