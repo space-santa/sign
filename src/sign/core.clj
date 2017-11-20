@@ -7,20 +7,6 @@
   [v s]
   (conj v (clojure.string/trim s)))
 
-(defn make-lines
-  "Takes a vector of strings and concatenates them to lines no longer than limit."
-  [words limit]
-  (loop [retval [] tmpstring "" tmpwords words]
-    (if (> (count tmpwords) 0)
-      (let [oldstring tmpstring
-            tmpstring (apply str tmpstring " " (first tmpwords))]
-        (if (> (count tmpstring) limit)
-          (recur (conj-trimmed-string retval oldstring)
-                 (first tmpwords)
-                 (rest tmpwords))
-          (recur retval tmpstring (rest tmpwords))))
-      (conj-trimmed-string retval tmpstring))))
-
 (defn longest-string
   "Returns the length of the longest string in the given vector of strings."
   [words]
@@ -31,6 +17,22 @@
           (recur (rest s) newlength)
           (recur (rest s) l)))
       l)))
+
+(defn make-lines
+  "Takes a vector of strings and concatenates them to lines no longer than limit."
+  [words limit]
+  (if (> (longest-string words) limit)
+    (throw (IllegalArgumentException. (str "No word can be longer than " limit)))
+    (loop [retval [] tmpstring "" tmpwords words]
+      (if (> (count tmpwords) 0)
+        (let [oldstring tmpstring
+              tmpstring (apply str tmpstring " " (first tmpwords))]
+          (if (> (count tmpstring) limit)
+            (recur (conj-trimmed-string retval oldstring)
+                   (first tmpwords)
+                   (rest tmpwords))
+            (recur retval tmpstring (rest tmpwords))))
+        (conj-trimmed-string retval tmpstring)))))
 
 (defn tokenize-string
   "Splits a string at whitespace and returns a vector of the tokens."
