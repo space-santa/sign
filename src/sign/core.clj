@@ -57,9 +57,10 @@
   (println (str "|  " text (apply str (repeat (- l (count text)) " ")) "  |")))
 
 (defn print-sign
-  [text]
+  "Split up `text` into lines not longer than `limit` and print them inside a frame."
+  [text limit]
   (let [words (tokenize-string text)
-        lines (make-lines words 40)
+        lines (make-lines words limit)
         length (longest-string lines)
         full-length (+ 4 length)]
     (print-top-bottom full-length)
@@ -71,4 +72,4 @@
 (defn -main
   "Print the list of args as a string with a border/frame."
   [& args]
-  (print-sign (clojure.string/join " " args)))
+  (print-sign (clojure.string/join " " args) 40))
