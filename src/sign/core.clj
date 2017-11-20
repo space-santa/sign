@@ -42,7 +42,7 @@
 (defn print-border
   " Prints a followed by l times b and finishes with another a. "
   [a b l]
-  (println (apply str a (apply str (repeat l b)) a)))
+  (println (str a (apply str (repeat l b)) a)))
 
 (defn print-top-bottom
   [l]
@@ -54,7 +54,7 @@
 
 (defn print-text-in-border
   [text l]
-  (println (apply str "|  " text (apply str (repeat (- l (count text)) " ")) "  |")))
+  (println (str "|  " text (apply str (repeat (- l (count text)) " ")) "  |")))
 
 (defn print-sign
   [text]
